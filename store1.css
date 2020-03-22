@@ -1,0 +1,106 @@
+body {
+            font-family: Arial, Verdana, sans-serif;
+            color: #111111;
+            
+        }
+
+        .row:hover {
+            background-color: seagreen;
+        }
+
+        #tbl {
+            width: 50%;
+            
+            position: relative;
+            bottom: 300px;
+            left: 320px;
+        }
+
+        #tl {
+            width: 40%;
+            position: absolute;
+            left: 30px;
+            padding-right: 0px;
+             
+        }
+
+        
+        #Usertable {
+            width: 100%;
+        }
+        #serachtable {
+            width: 100%;
+            
+        }
+
+        #demo {
+            width: 30%; 
+            position: relative;
+            right: 430px;
+            background-color:inherit ;
+
+        }
+
+        
+
+        b {
+            margin-right: 10px;
+        }
+
+        label {
+            padding-right: 10px;
+        }
+
+        button {
+            background-color: seagreen;
+            width: 100px;
+            font-size: 20px;
+            font-style: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #lp {
+            margin-right: 33px;
+        }
+
+        #ld {
+            margin-right: 13px;
+        }
+
+        #lm {
+            margin-right: 0px;
+        }
+
+        #ln {
+            margin-right: 22px;
+        }
+
+        #btn {
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+
+        #btns{margin: 10px;
+        width: 13%;
+          }
+        
+        #header {
+            background-color: seagreen;
+            font-size: 25px;
+            color: #111111;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            padding: 0px;
+            
+                    }
+
+        #back {
+            position: absolute;
+            top: 590px;
+            left: 50px;
+        }
+
+        #r {
+            background-color: seagreen;
+        }

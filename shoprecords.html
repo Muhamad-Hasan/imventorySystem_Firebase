@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=view, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shop Records</title>
+    
+    <style>
+    #header{
+        width:100%;
+        text-align: center;
+        background-color:seagreen;
+        font-size: 25px;
+        color: #111111;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: bold;
+        margin: 0px;
+        padding: 0px;
+        position :absolute;
+        top:0;
+        left:0px; 
+        }
+        #back{position: absolute;
+        top:550px;
+        left:50px;  }
+        tr{border:hidden;
+        border-collapse: collapse;
+        border-spacing:0px;
+        margin:0px;
+        cursor: pointer;
+        transition: all .5s ease-in-out;}
+        td {
+            padding: 7px 0px 10px 0px;
+        }
+
+        th {
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 90%;
+        border-bottom: 2px solid #111111;
+        border-top: 1px solid rgb(34, 10, 10);
+        text-align: left;}
+        .row:hover {
+        background-color: seagreen;
+        }
+        #tbl{width: 68%;
+        position: relative;
+        left:250px;
+        top:120px;
+        border: 1px solid black;
+        }
+        button{background-color: seagreen;
+        width:90px;
+        font-size: 17px;
+        font-style: bold;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-left:20px;
+        margin-top:30px;
+        height: 35px;}
+        #recordtbl{width: 100%;}
+        #r{background-color: seagreen;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">    
+        <div class="container-fluid" id="header">
+        <h1>Shop Records</h1>
+    </div>
+    
+    <button class="btn" id="back" onClick="back()"><span class="glyphicon glyphicon-arrow-left"></span>Back</button>
+    
+    <div class="table-responsive" id="tbl">   
+        <table class="table" id="recordtbl" border="1" width="300">
+    </div>
+
+</div>
+
+            <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+            <script>
+                // Initialize Firebase
+                var config = {
+                    apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+                    authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+                    databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+                    projectId: "hardware-shop-c0ae6",
+                    storageBucket: "hardware-shop-c0ae6.appspot.com",
+                    messagingSenderId: "625704509643"
+                };
+                firebase.initializeApp(config);
+            </script>
+            
+    <script>
+    function back(){
+    history.back();
+    }
+
+    if (!navigator.onLine) {
+            alert("Please check your internet connection.");
+        }
+
+    var firebaseRef = firebase.database();
+        var rtbl = document.getElementById("recordtbl");
+        firebaseRef.ref("ShopRecords/").on("value", snap => {
+            var res = snap.val();
+            if (res) {
+                var shoprec = Object.values(res);
+
+                rtbl.innerHTML = `    
+              <tr id="r" >
+                <th >Product Id</th>
+                <th >Product Name</th>
+                <th >Product Description</th>
+                <th >Quantity</th>
+                <th >Store No</th>
+                <th >Date</th>
+                
+              </tr>`;
+                shoprec.forEach(sObj => {
+                    console.log(sObj);
+                    rtbl.innerHTML += `
+              <tr class="row" id="del"  onClick ="del(this)" >
+                  <td > ${sObj.Id}</td>
+                  <td > ${sObj.Name}</td>
+                  <td > ${sObj.Description}</td>
+                  <td > ${sObj.Quantity}</td>
+                  <td > ${sObj.Store}</td>
+                  <td > ${sObj.Date}</td>
+                  
+                  
+              </tr>`;
+                });
+            }
+        });
+
+        function del(pointer)
+         {
+            
+        
+            console.log(pointer);
+            var no = pointer.rowIndex;
+            console.log(no);
+            var recordtbl = document.getElementById("recordtbl");
+            //var salestbl = document.getElementById("salestbl");
+            var pi = pointer.cells[0].innerText.toLowerCase();
+            var pn = pointer.cells[1].innerText.toLowerCase();
+            var pd = pointer.cells[2].innerText.toLowerCase();
+            var q = pointer.cells[3].innerText.toLowerCase();
+            var s = pointer.cells[4].innerText.toLowerCase();
+            var d = pointer.cells[5].innerText.toLowerCase();
+            
+            console.log(pi);
+            
+            var ref = firebase.database().ref('ShopRecords/');
+            ref.orderByChild("Date").equalTo(d).on("child_added",function(snapshot) {
+        console.log(snapshot.val());
+        var k = snapshot.key;
+        ref.child(k).remove();
+        
+});
+
+            alert("Delete Products which is added on "+d);
+            window.location.reload();    
+        }
+          
+</script>
+</body>
+</html>

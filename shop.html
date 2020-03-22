@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=view, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shop</title>
+    
+    <style>
+    #header{
+        width:100%;
+        text-align: center;
+        background-color:seagreen;
+        font-size: 25px;
+        color: #111111;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: bold;
+        margin: 0px;
+        padding: 0px;
+        position :absolute;
+        top:0;
+        left:0px; 
+        }
+        #back{position: absolute;
+        top:550px;
+        left:50px;  }
+        tr{border:hidden;
+        border-collapse: collapse;
+        border-spacing:0px;
+        margin:0px;
+        cursor: pointer;
+        transition: all .5s ease-in-out;}
+        td {
+            padding: 7px 0px 10px 0px;
+        }
+
+        th {
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 90%;
+        border-bottom: 2px solid #111111;
+        border-top: 1px solid rgb(34, 10, 10);
+        text-align: left;}
+        .row:hover {
+        background-color: seagreen;
+        }
+        #tbl{width: 50%;
+        position: absolute;
+        right:10px;
+        top:120px;
+        border: 1px solid black;
+        }
+        button{background-color: seagreen;
+        width:90px;
+        font-size: 17px;
+        font-style: bold;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-left:20px;
+        margin-top:30px;
+        height: 35px;}
+        #salestbl{width: 100%;}
+        #r{background-color: seagreen;}
+        #demo{position:absolute;
+        left:100px;
+        width: 28%;
+        top:220px;}
+        #btns{position: absolute;
+        right:180px;
+        top:80px;
+        color: khaki;
+        border: 1px solid seagreen;
+        }
+        #Product_id{margin-left: 60px;
+            margin-right: 40px;
+            margin-bottom: 10px;}
+
+        #Product_name{margin-left: 40px;
+            margin-bottom: 10px;}
+        #Product_description{margin-left:55px;
+            margin-bottom: 10px;}
+        
+        #searchtable{width: 35%;}
+        
+    </style>
+</head>
+<body>
+    <div id="demo">
+                    <label id="ln" for="Product_id"><b>Product Id :</b></label>
+                    <input type="text" id="Product_id" placeholder="Product Id">
+                    <label id="lm" for="Product_name"><b>Product Name:</b></label>
+                    <input type="text" class="text" id="Product_name" placeholder="Product_name">
+                    <label id="ld" for="Product_description"><b>Description :</b></label>
+                    <input type="text" class="text" id="Product_description" placeholder="Product Description">
+                    <button class="btn" id="btns" onclick="search()">Search</button>
+                    <br/><br/>
+                    <br/><br/>
+                    <br/>
+                    <table id="searchtable" border="1px"></table>
+                    
+
+
+    </div>
+
+    <div class="container-fluid">    
+        <div class="container-fluid" id="header">
+        <h1>Stock In Shop</h1>
+        
+    </div>
+    
+    <button id="back" class=".btn-success" onclick="back()">Back</button>
+    <div class="table-responsive" id="tbl">   
+        <table class="table" id="salestbl" border="1" width="300">
+    </div>
+
+</div>
+
+            <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+            <script>
+                // Initialize Firebase
+                var config = {
+                    apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+                    authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+                    databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+                    projectId: "hardware-shop-c0ae6",
+                    storageBucket: "hardware-shop-c0ae6.appspot.com",
+                    messagingSenderId: "625704509643"
+                };
+                firebase.initializeApp(config);
+            </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            
+    <script>
+    function back(){
+    history.back();
+    }
+
+    if (!navigator.onLine) {
+            alert("Please check your internet connection.");
+        }
+
+
+    var firebaseRef = firebase.database();
+        var shoptbl = document.getElementById("salestbl");
+        firebaseRef.ref("Shop/").on("value", snap => {
+            var res = snap.val();
+            if (res) {
+                var shop = Object.values(res);
+
+                shoptbl.innerHTML = `    
+              <tr id="r" >
+                <th >Product Id</th>
+                <th >Product Name</th>
+                <th >Product Description</th>
+                <th >Quantity</th>
+                <th >Store No</th>
+                <th >Date</th>
+                
+              </tr>`;
+                shop.forEach(shopObj => {
+                    shoptbl.innerHTML += `
+              <tr class="row" id="del"  onClick ="del(this)" >
+                  <td > ${shopObj.Id}</td>
+                  <td > ${shopObj.Name}</td>
+                  <td > ${shopObj.Description}</td>
+                  <td > ${shopObj.Quantity}</td>
+                  <td > ${shopObj.Store}</td>
+                  <td > ${shopObj.Date}</td>
+                  
+                  
+              </tr>`;
+                });
+            }
+        });
+
+        function del(pointer)
+         {
+            var bool =  prompt("Do yoy want to delete it?","yes");
+            console.log(bool);
+            console.log(pointer);
+            if(bool == "yes")
+            {
+                var no = pointer.rowIndex;
+            var salestbl = document.getElementById("salestbl");
+            var pi = pointer.cells[0].innerText.toLowerCase();
+            var pn = pointer.cells[1].innerText.toLowerCase();
+            var pd = pointer.cells[2].innerText.toLowerCase();
+            var q =  pointer.cells[3].innerText.toLowerCase();
+            console.log(pi);
+            
+            
+            var ref = firebase.database().ref('Shop/' + pi+pn+pd);
+            ref.remove();
+            alert(pn + " is deleted from Shop");
+            window.location.reload();
+
+
+            }
+            
+        }
+        
+
+function search() {
+
+var Product = document.getElementById("Product_name").value.toLowerCase();
+var Product_description = document.getElementById("Product_description").value.toLowerCase();
+var Id = document.getElementById("Product_id").value.toLowerCase();
+//if(Product.slice(0,1) ==" "){alert("Please Enter properly");}
+console.log(Id + Product + Product_description);
+var searchtable = document.getElementById("searchtable");
+console.log(Product);
+var o = firebase.database().ref("Shop/");
+//console.log(snapshot.val().Quantity);
+o.child(Id + Product + Product_description).once('value', function (snapshot) {
+    console.log(snapshot.exists());
+    if (snapshot.exists()) {
+        firebaseRef.ref("Shop/" + Id + Product + Product_description).on("value", function (s) {
+            //console.log(s.val().Quantity);
+            searchtable.innerHTML = `
+    <tr class="row" id="r">
+        <td class="text-center">ID</td>
+        <td>Product Name</td>
+        <td>Description</td>
+        <td>Quantity</td>
+    </tr>`;
+            console.log((document.getElementById("r")));
+            searchtable.innerHTML += `
+    <tr class="row" onClick ="del(this)" >
+        <td>${s.val().Id}</td>
+        <td>${s.val().Name}</td>
+        <td>${s.val().Description}</td>
+        <td>${s.val().Quantity}</td>
+    </tr>`;
+    
+        });
+
+
+    }
+    else {
+        alert(Product + "is not in Shop");
+    }
+});
+
+}
+
+
+        
+</script>
+</body>
+</html>

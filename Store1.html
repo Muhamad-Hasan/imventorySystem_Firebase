@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Store 1</title>
+    <link rel="stylesheet" type="text/css" href="store1.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div class="jumbotron text-center" id="header">
+        <h1 id="heading">Store 1</h1>
+    </div>
+
+    <div class="container-fluid jumbotron text-left" id="demo">
+        <label id="ln" for="Product_id"><b>Product Id :</b></label>
+        <input type="text" id="Product_id" placeholder="Product Id">
+        <label id="lm" for="Product_name"><b>Product Name:</b></label>
+        <input type="text" class="text" id="Product_name" placeholder="Product_name">
+        <label id="ld" for="Product_description"><b>Description :</b></label>
+        <input type="text" class="text" id="Product_description" placeholder="Product Description">
+        <label id="lp" for="quantity"><b>Quantity :</b></label>
+        <input type="text" class="text" id="quantity" placeholder="Quantity">
+
+        <button id="btn" class="btn" onClick="writeUserData()">Add</button>
+        <button id="btn" class="btn" onClick="edit(this)">Update</button>
+        <button id="btn" class="btn" onClick="del()">Delete</button>
+
+    </div>
+
+    <div class="container-fluid" id="tl">
+        <input type="text"  id="id" size="10" placeholder="Product_Id">
+        <input type="text"  id="search" size="17" placeholder="Product_Name">
+        <input type="text"  id="des" size="17" placeholder="Description">
+        
+        <button class="btn" id="btns" onclick="search()"><span class="glyphicon glyphicon-search"></span></button>
+        <br /><br />
+        <table class="table" id="searchtable" border="1"></table>
+    </div>
+
+
+    <div class="container-fluid" id="tbl">
+        <table class="table jumbotron" id="Usertable" border="1"></table>
+    </div>
+
+    <button class="btn" id="back" onClick="back()"><span class="glyphicon glyphicon-arrow-left"></span></button>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+            authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+            databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+            projectId: "hardware-shop-c0ae6",
+            storageBucket: "hardware-shop-c0ae6.appspot.com",
+            messagingSenderId: "625704509643"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth();
+        var year = now.getFullYear();
+        var sec = now.getSeconds();
+        var min = now.getMinutes();
+        
+        var completeDate = date + "/" + (month + 1) + "/" + year;
+        console.log(completeDate);
+
+        if (!navigator.onLine) {
+            alert("Please check your internet connection.");
+        }
+
+
+
+        function search() {
+
+            var Product = document.getElementById("search").value.toLowerCase();
+            var Product_description = document.getElementById("des").value.toLowerCase();
+            var Id = document.getElementById("id").value.toLowerCase();
+            //if(Product.slice(0,1) ==" "){alert("Please Enter properly");}
+            console.log(Id + Product + Product_description);
+            var searchtable = document.getElementById("searchtable");
+            console.log(Product);
+            var o = firebase.database().ref("Products/store1");
+            //console.log(snapshot.val().Quantity);
+            o.child(Id + Product + Product_description).once('value', function (snapshot) {
+                console.log(snapshot.exists());
+                if (snapshot.exists()) {
+                    firebaseRef.ref("Products/store1/" + Id + Product + Product_description).on("value", function (s) {
+                        //console.log(s.val().Quantity);
+                        searchtable.innerHTML = `
+                <tr class="row" id="r">
+                    <td class="text-center">ID</td>
+                    <td>Product Name</td>
+                    <td>Description</td>
+                    <td>Quantity</td>
+                </tr>`;
+                        console.log((document.getElementById("r")));
+                        searchtable.innerHTML += `
+                <tr class="row"  onClick="al(this)">
+                    <td>${s.val().Id}</td>
+                    <td>${s.val().Name}</td>
+                    <td>${s.val().Description}</td>
+                    <td>${s.val().Quantity}</td>
+                </tr>`;
+                
+                    });
+
+
+                }
+                else {
+                    alert(Product + "is not in Store1");
+                }
+            });
+
+        }
+
+        function check(n)
+        {
+            alert(n);
+        }
+
+        function del() {
+            var Product_name = document.getElementById("Product_name").value.toLowerCase();
+            var Product_id = document.getElementById("Product_id").value.toLowerCase();
+            var Product_description = document.getElementById("Product_description").value.toLowerCase();
+            var quantity = document.getElementById("quantity").value.toLowerCase();
+
+            var ref = firebase.database().ref('Products/store1/' + Product_id+Product_name+Product_description);
+            ref.remove();
+
+            
+            alert(Product_name + " is deleted from your database.");
+            window.location.reload();
+
+        }
+
+        function back() {
+            history.back();
+        }
+
+
+        var firebaseRef = firebase.database();
+        var tableRef = document.getElementById("Usertable");
+        firebaseRef.ref("Products/store1").on("value", snap => {
+            var res = snap.val();
+            //console.log(res.Name)
+
+            if (res) {
+                var users = Object.values(res);
+
+                tableRef.innerHTML = `    
+              <tr class="row" id="r">
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Description</th>
+                <th>Quantity</th>
+                <th>Date </th>
+              </tr>`;
+                users.forEach(userObj => {
+                    tableRef.innerHTML += `
+              <tr class="row" onClick="al(this)" >
+                  <td> ${userObj.Id}</td>
+                  <td> ${userObj.Name}</td>
+                  <td> ${userObj.Description}</td>
+                  <td> ${userObj.Quantity}</td>
+                  <td> ${userObj.Date}</td>
+              </tr>`;
+                });
+            }
+        });
+        var now;
+
+
+        function al(pointer) {
+            //console.log(no);
+            var pi = pointer.cells[0].innerText.toLowerCase();
+            var pn = pointer.cells[1].innerText.toLowerCase();
+            var pd = pointer.cells[2].innerText.toLowerCase();
+            var q = pointer.cells[3].innerText.toLowerCase();
+            document.getElementById("Product_id").value = pi;
+            document.getElementById("Product_name").value = pn;
+            document.getElementById("Product_description").value = pd;
+            document.getElementById("quantity").value = q;
+
+            var quantity = prompt("Enter a Quantity :");
+                if(quantity.slice((quantity.length)-1,quantity.length) == " ")
+            {
+                quantity = quantity.slice(0,(quantity.length)-1);
+                
+            }
+            //alert(quantity);
+            if (quantity < 0 || quantity == " " || quantity == null || quantity == undefined) {
+                alert("Please insert properly");
+                quantity = 0;
+            }
+            else if (quantity > 0) {
+                var Store = "store1";
+                var  n = new Date();
+            var date = n.getDate();
+            var month = n.getMonth();
+            var hour = n.getHours();
+            var min = n.getMinutes();
+            var sec = n.getSeconds();
+                var com = date.toString()+month.toString()+hour.toString()+min.toString()+sec.toString();
+        
+                firebase.database().ref('ShopRecords/').push({
+                        Id: pi,
+                        Name: pn,
+                        Description: pd,
+                        Date: completeDate,
+                        Quantity: quantity,
+                        Store: Store,
+                        Del_Id:com
+                    });
+                    console.log("record");
+            
+
+                now = pi + pn + pd;
+                //console.log(now);
+                var updated;
+                var lastQuantity;
+                var r = firebase.database().ref("Products/store1/" + now);
+                r.once('value', function (snapshot) {
+                    //console.log(snapshot.key);
+                    //k[i] = snapshot.key;
+                    lastQuantity = snapshot.val().Quantity;
+                    console.log(lastQuantity);
+                    updated = lastQuantity - quantity;
+                    console.log(updated);
+
+                });
+                    if(updated >=0)
+                    {
+                        firebase.database().ref('Products').child("store1/").child(now).update({
+                        //Id: Product_id,
+                        //Name:Product_name,
+                        //Description: Product_description,
+                        //Date: completeDat
+                        Quantity: updated
+                    });
+               
+                var ref = firebase.database().ref('Products/store1');
+                ref.orderByChild("Quantity").equalTo(0).on("child_added", function (snapshot) {
+                    snapshot.ref.remove();
+                    console.log('removed');
+                    window.location.reload();
+                });
+                //var pn = pointer.cells[1].innerText;
+
+                var k = firebase.database().ref("Shop/");
+                //console.log(snapshot.val().Quantity);
+                k.child(now).once('value', function (snapshot) {
+                    console.log(snapshot.exists());
+                    var real;
+                    if (snapshot.exists()) {
+                        k.child(now).once('value', function (snapshot) {
+                            var quantityInShop = snapshot.val().Quantity;
+                            console.log(quantityInShop);
+                            real = parseInt(quantity) + parseInt(quantityInShop);
+                            console.log(real);
+
+                            firebase.database().ref('Shop/' + now).update({
+                                Quantity: real
+                            });
+
+                        });
+                        alert(quantity + " " + pn + " is Shifted to Shop.");
+                    }
+
+
+                    else {
+                        var Store = "Store1"
+                        firebase.database().ref('Shop/').child(now).set({
+                            Id: pi,
+                            Name: pn,
+                            Description: pd,
+                            Date: completeDate,
+                            Quantity: quantity,
+                            Store: Store
+                        });
+                        alert(quantity + " " + pn + " is Shifted to Shop.");
+
+                    }
+
+
+                });
+                //});
+
+            }
+                else{alert(quantity+" "+pn+" is not present in store1 , Only "+lastQuantity+" lock is present.");}
+                    }
+                    
+        }
+
+
+        function edit(pointer) {
+            var Product_name = document.getElementById("Product_name").value.toLowerCase();
+            var Product_id = document.getElementById("Product_id").value.toLowerCase();
+            var Product_description = document.getElementById("Product_description").value.toLowerCase();
+            var Quan = document.getElementById("quantity").value.toLowerCase();
+            
+            console.log(Product_id+Product_name+Product_description);
+            var o = firebase.database().ref("Products/store1/" + Product_id + Product_name + Product_description).update({
+                Id: Product_id,
+                Name: Product_name,
+                Description: Product_description,
+                Date: completeDate,
+                Quantity: Quan,
+
+            });
+            alert(Product_name+ "is updated.");
+        }
+
+        //   console.log(k[i]);
+
+        
+            
+
+        function writeUserData() {
+            
+            var Product_name = document.getElementById("Product_name").value.toLowerCase();
+            var Product_id = document.getElementById("Product_id").value.toLowerCase();
+            var Product_description = document.getElementById("Product_description").value.toLowerCase();
+            var Quan = document.getElementById("quantity").value.toLowerCase();
+            
+            //child(Product_id+Product_name+Product_description+Quan+Store+completeDate)
+            var Store = "store1";
+            var  n = new Date();
+            var date = n.getDate();
+            var month = n.getMonth();
+            var hour = n.getHours();
+            var min = n.getMinutes();
+            var sec = n.getSeconds();
+            
+            var n = date.toString()+month.toString()+hour.toString()+min.toString()+sec.toString();
+        
+            if(Product_name.length>0 && Product_id.length>0 && Product_description.length>0 && Quan.length>0){
+            firebase.database().ref('Records/').push({
+                        Id: Product_id,
+                        Name: Product_name,
+                        Description: Product_description,
+                        Date: completeDate,
+                        Quantity: Quan,
+                        Store: Store,
+                        Del_Id:n
+                    });
+                    console.log("record");
+                }
+            var o = firebase.database().ref("Products/store1");
+            //console.log(snapshot.val().Quantity);
+            o.child(Product_id+Product_name+Product_description).once('value', function (snapshot) {
+                console.log(snapshot.exists());
+                var real;
+                if (snapshot.exists()) {
+                    o.child(Product_id + Product_name + Product_description).once('value', function (snapshot) {
+                        var quantity = snapshot.val().Quantity;
+                        console.log(quantity);
+                        real = parseInt(quantity) + parseInt(Quan);
+                        console.log(real);
+
+
+
+                    });
+                    console.log(Product_id+Product_name+Product_description);
+            
+                    firebase.database().ref('Products').child("store1").child(Product_id + Product_name + Product_description).set({
+                        Id: Product_id,
+                        Name: Product_name,
+                        Description: Product_description,
+                        Date: completeDate,
+                        Quantity: real,
+                        Store: Store
+                    });
+                    alert(Product_name + " is Updated");
+                }
+                else {
+                    console.log(Product_id+Product_name+Product_description);
+                    firebase.database().ref("Products/").child("store1").child(Product_id+Product_name+Product_description).set({
+                        Id: Product_id,
+                        Name: Product_name,
+                        Description: Product_description,
+                        Date: completeDate,
+                        Quantity: Quan,
+                        Store: Store
+                    });
+                    console.log("inserted");
+                }
+
+
+            });
+
+
+            document.getElementById("Product_name").value = "";
+            document.getElementById("Product_id").value = "";
+            document.getElementById("Product_description").value = "";
+            document.getElementById("quantity").value = "";
+
+
+        }
+
+        
+    </script>
+</body>
+
+</html>

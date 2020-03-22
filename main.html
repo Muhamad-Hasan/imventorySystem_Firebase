@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main Page</title>
+    <style>
+        body {
+        font-family: Arial, Verdana, sans-serif;
+        color: #111111;
+        background-color: seagreen;}
+    
+    #main{display: block;
+    border: 4px solid white;
+    margin:50px;
+    margin-top: 90px;
+    height: 500px;
+    background-color: khaki;
+    
+    }
+    #header{
+        width:100%;
+        text-align: center;
+        background-color:seagreen;
+        font-size: 25px;
+        color: #111111;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: bold;
+        margin: 0px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        position :relative;
+        top:0px;
+        left:0px; 
+        }
+        button{background-color: seagreen;
+        width:16%;
+        height: 100px;
+        font-size: 30px;
+        font-style: bold;
+        margin-right: 100px;
+        margin-left: 100px;
+        margin-top:30px;
+        margin-bottom:30px;
+        border: 2px solid black;
+        }
+        #pis{position: relative;
+        top:-14px;}
+        #logout{position: absolute;
+        top:10px;
+        right:-50px;
+        border : 0px solid white;
+        height: 20px;
+        font-size: 25px;
+        color: khaki;}
+        #search{background-color: seagreen;
+        border: 1px solid seagreen;
+        color: khaki;
+        position: absolute;
+        left: 940px;
+        top: -10px;}
+        #shop{position: relative;
+        top:15px;}
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="header">
+            <button id="search" onclick="searchRecords()">Search Records </button>
+            
+            <h1>Inventory System</h1>
+        </div>
+        <button onclick="store1()">Store 1 </button>
+        <button onclick="store2()">Store 2</button>
+        <button onclick="store3()">Store 3 </button>
+        <button id="shop" onclick="shop()">  Shop </button>
+        <button onclick="records()">Store Records </button>
+        <button onclick="shopRecords()">Shop Records </button>
+        
+        
+    </div>
+    <button id="logout" onclick="logout()">Log Out</button>
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+            authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+            databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+            projectId: "hardware-shop-c0ae6",
+            storageBucket: "hardware-shop-c0ae6.appspot.com",
+            messagingSenderId: "625704509643"
+        };
+        firebase.initializeApp(config);
+    </script>
+   
+    <script>
+        function store1()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('Store1.html');
+        }
+        function store2()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('Store2.html');
+        }
+        function store3()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('store3.html');
+        }
+        function shop()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('shop.html');
+        }
+        function records()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('records.html');
+        }
+        function shopRecords()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('shopRecords.html');
+        }
+        function searchRecords()
+        {
+            document.getElementById("main").style.display="none";
+            window.location.assign('searchRecords.html');
+        }
+        function logout()
+        {
+      firebase.auth().signOut().then(window.location.assign('login.html'));;
+      
+        }
+    
+    </script>
+</body>
+</html>

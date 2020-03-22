@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Log In Page</title>
+    <style>
+    body {
+        font-family: Arial, Verdana, sans-serif;
+        color: #111111;
+        background-color: seagreen;}
+        
+    button{background-color:khaki;
+        width:90px;
+        font-size: 17px;
+        font-style: bold;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-left:20px;
+        margin-top:30px;
+        height: 35px;
+        border: 2px solid black; }
+        
+    #login{width:40%;
+        position: absolute;
+        left:25%;
+        display :block;
+        padding-left:30px;
+        height:200px; 
+        padding-right:30px;
+        padding-top:50px;
+        margin-top:200px; 
+        align-content: center;
+        border: 3px solid khaki;  
+        }
+    .text{width: 300px;
+        height: 25px;
+        font-size: 17px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: bold;
+        margin-bottom:10px;
+        margin-right:30px;
+         
+        }
+    b{font-size: 20px;
+        margin-left:20px; 
+        margin-right:10px;
+        }
+        label{padding-right:10px; }
+        #ea{margin-right: 8px;}
+        #p{margin-right: 50px;}
+    #loginbtn{margin-left: 200px;}
+    #signin{position: absolute;
+    right:100px;}
+    </style>
+</head>
+
+<body>
+    
+    <div id="login">
+        <label id="ea"for="email"><b>Email Address :</b></label>    
+        <input type="text" class="text" id="email" placeholder="Email">
+        <label id="p" for="password"><b>Password :</b></label>    
+            
+        <input type="password" class="text" id="pass" maxlength="8" placeholder="password">
+            <button id="loginbtn" onClick="login()">Log In</button>
+    </div>
+    <button id="signin" onClick="signin()">Sign In</button>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+            authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+            databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+            projectId: "hardware-shop-c0ae6",
+            storageBucket: "hardware-shop-c0ae6.appspot.com",
+            messagingSenderId: "625704509643"
+        };
+        firebase.initializeApp(config);
+    </script>
+    
+    <script src="index.js"></script>
+</body>
+
+</html>

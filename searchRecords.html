@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, Verdana, sans-serif;
+            color: #111111;
+            
+        }
+        .row:hover {
+            background-color: seagreen;
+        }
+        #searchtable{ 
+            width: 60%;
+            position:absolute;
+            left:40%;
+            top: 70px;
+            }
+            button {
+            background-color: seagreen;
+            width: 150px;
+            font-style: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #header {
+            background-color: seagreen;
+            font-size: 25px;
+            color: #111111;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: -19px;
+            padding: 0px;
+            
+                    }
+
+        #back {
+            position: absolute;
+            top: 590px;
+            left: 50px;
+        }
+
+        th {
+            background-color: seagreen;
+        }
+
+        #lp {
+            margin-right: 33px;
+        }
+
+        #ld {
+            margin-right: 13px;
+        }
+
+        #lm {
+            margin-right: 0px;
+        }
+
+        #ln {
+            margin-right: 22px;
+        }
+
+        #btns {
+            position: relative;
+            bottom: 40px;
+            left: 65px;
+
+        }
+        #btnshop {
+            position: relative;
+            bottom: 40px;
+            left: 85px;
+
+        }
+        #demo {
+            width: 30%; 
+            position: relative;
+            right: 430px;
+            background-color:inherit ;
+
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div class="jumbotron text-center" id="header">
+        <h1 id="heading">Search Records</h1>
+    </div>
+
+    
+    <div class="container-fluid" id="tl">
+            <div class="container-fluid jumbotron text-left" id="demo">
+                    <label id="lm" for="Product_name"><b>Product Name:</b></label>
+                    <input type="text" class="text" id="search" placeholder="Product_name">
+                    
+        </div>
+        
+        <button class="btn" id="btns" onclick="search()"><span class="glyphicon glyphicon-search"></span> Search in Store</button>
+        <button class="btn" id="btnshop" onclick="searchShop()"><span class="glyphicon glyphicon-search"></span> Search in shop</button>
+        
+         <table class="table" id="searchtable" border="1">
+            <tr class="row" id="r">
+                <th class="text-center">ID</th>
+                <th class="text-center">Product Name</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center">Store</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Del_Id</th>
+            </tr>`;
+        
+        </table>
+    </div>
+
+
+    
+    <button class="btn" id="back" onClick="back()"><span class="glyphicon glyphicon-arrow-left"></span></button>
+    
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAk4sOKkvIeoww6VjxyiSsW-S3Pqz6GDa4",
+            authDomain: "hardware-shop-c0ae6.firebaseapp.com",
+            databaseURL: "https://hardware-shop-c0ae6.firebaseio.com",
+            projectId: "hardware-shop-c0ae6",
+            storageBucket: "hardware-shop-c0ae6.appspot.com",
+            messagingSenderId: "625704509643"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        
+        if (!navigator.onLine) {
+            alert("Please check your internet connection.");
+        }
+
+
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth();
+        var year = now.getFullYear();
+        var completeDate = date + "/" + (month + 1) + "/" + year;
+
+
+        
+        function search() {
+            document.getElementById("btnshop").style.backgroundColor="seagreen";
+    document.getElementById("btns").style.backgroundColor="yellow";
+    $(".right").remove();
+    var Product = document.getElementById("search").value.toLowerCase();
+    var searchtable = document.getElementById("searchtable");
+    var o = firebase.database().ref("Records/");
+    o.orderByChild("Name").equalTo(Product).on("child_added", function(snapshot) {
+            console.log(snapshot.val().Quantity);
+            var  res = snapshot.val();
+                        
+    console.log(res.Name);
+    
+
+    $("#searchtable").append("<tr class='row right' onclick='del(this)' ><td>"+res.Id+"</td><td>"+res.Name+"</td><td>"+res.Description+"</td><td>"+res.Quantity+"</td><td>"+res.Store+"</td><td>"+res.Date+"</td><td>"+res.Del_Id+"</td></tr>");
+    
+    });
+    
+    }
+
+    function searchShop() {
+    
+    document.getElementById("btnshop").style.backgroundColor="yellow";
+    document.getElementById("btns").style.backgroundColor="seagreen";
+    var Product = document.getElementById("search").value.toLowerCase();
+    $(".right").remove();
+    var searchtable = document.getElementById("searchtable");
+    var o = firebase.database().ref("ShopRecords/");
+    o.orderByChild("Name").equalTo(Product).on('child_added', function (snapshot) {
+            console.log(snapshot.val().Quantity);
+            var  res = snapshot.val();
+                        
+    console.log(res.Name);
+
+
+    $("#searchtable").append("<tr class='row right' onclick='delt(this)' ><td>"+res.Id+"</td><td>"+res.Name+"</td><td>"+res.Description+"</td><td>"+res.Quantity+"</td><td>"+res.Store+"</td><td>"+res.Date+"</td><td>"+res.Del_Id+"</td></tr>");
+    
+    });
+    
+    
+    }
+    
+    function del(pointer){
+        console.log(pointer);
+        var bool =  prompt("Do yoy want to delete it?","yes");
+            console.log(bool);
+            if(bool == "yes")
+            {
+            var num = pointer.rowIndex;
+            console.log(num);
+            var pi = pointer.cells[0].innerText;
+            var pn = pointer.cells[1].innerText;
+            var pd = pointer.cells[2].innerText;
+            var q = pointer.cells[3].innerText;
+            var d = pointer.cells[4].innerText;
+            var store = pointer.cells[5].innerText;
+            var del = pointer.cells[6].innerText;
+            console.log(del);       
+
+            var r = firebase.database().ref('Records/');
+            r.orderByChild("Del_Id").equalTo(del).on("child_added", function (snapshot){
+                var k = snapshot.key;
+                console.log(snapshot.key);
+                r.child(k).remove();
+                document.getElementById("searchtable").deleteRow(num);
+
+            });
+            alert(pn +" is deleted from Shop Records");
+            //window.location.reload();
+
+            }
+            
+    }
+
+    function delt(pointer){
+        console.log(pointer);
+        var bool =  prompt("Do yoy want to delete it?","yes");
+            console.log(bool);
+            //console.log(pointer);
+            if(bool == "yes")
+            {
+            var no = pointer.rowIndex;
+            console.log(no);
+            var pi = pointer.cells[0].innerText;
+            var pn = pointer.cells[1].innerText;
+            var pd = pointer.cells[2].innerText;
+            var q = pointer.cells[3].innerText;
+            var d = pointer.cells[4].innerText;
+            var store = pointer.cells[5].innerText;
+            var d = pointer.cells[6].innerText;
+            console.log(d);
+            
+            var refer = firebase.database().ref('ShopRecords/');
+            refer.orderByChild("Del_Id").equalTo(d).on("child_added", function (snapshot){
+                var ky = snapshot.key;
+                console.log(snapshot.key);
+                refer.child(ky).remove();
+                //alert(pn+" is deleted");
+                document.getElementById("searchtable").deleteRow(no);
+
+            });
+            alert(pn +" is deleted from Shop Records");
+            //window.location.reload();
+
+            }}
+    function back() {
+            history.back();
+        }
+
+    </script>
+</body>
+</html>
